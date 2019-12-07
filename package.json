@@ -1,0 +1,19 @@
+{
+  "name": "hackernews-clone",
+  "version": "1.0.0",
+  "description": "hacker news clone",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start": "nodemon index.js"
+  },
+  "keywords": [
+    "news",
+    "hacker"
+  ],
+  "author": "Daniel Uche",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.1"
+  }
+}
