@@ -4,4 +4,15 @@ type Feed {
   updatedAt: DateTime! @updatedAt
   description: String!
   url: String!
+  postedBy: User
+}
+
+type User {
+  id: ID! @id
+  name: String!
+  email: String! @unique
+  password: String!
+  feeds: [Feed!]!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
