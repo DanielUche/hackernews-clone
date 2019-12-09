@@ -1,4 +1,4 @@
-type Link {
+type Feed {
   id: ID! @id
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
