@@ -1,4 +1,5 @@
 const { GraphQLServer } = require("graphql-yoga");
+const { prisma } = require("./generated/prisma-client");
 
 let links = [
   {
@@ -52,5 +53,24 @@ const server = new GraphQLServer({
   typeDefs: "./src/schemas/index.graphql",
   resolvers
 });
+
+const setPrisma = async () => {
+  const newLink = await prisma.createLink({
+    url: "www.prisma.io",
+    description: "Prisma replaces traditional ORMs"
+  });
+
+  console.log(`Created new link: ${newLink.url} (ID: ${newLink.id})`);
+
+  // Read all links from the database and print them to the console
+  const allLinks = await prisma.links();
+  console.log(allLinks);
+};
+
+try {
+  setPrisma();
+} catch (err) {
+  console.log(err);
+}
 
 server.start(() => console.log(`Server is running on http://localhost:4000`));
