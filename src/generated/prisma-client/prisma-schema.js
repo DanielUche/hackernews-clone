@@ -3,7 +3,7 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateLink {
+/* GraphQL */ `type AggregateFeed {
   count: Int!
 }
 
@@ -13,7 +13,7 @@ type BatchPayload {
 
 scalar DateTime
 
-type Link {
+type Feed {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -21,24 +21,24 @@ type Link {
   url: String!
 }
 
-type LinkConnection {
+type FeedConnection {
   pageInfo: PageInfo!
-  edges: [LinkEdge]!
-  aggregate: AggregateLink!
+  edges: [FeedEdge]!
+  aggregate: AggregateFeed!
 }
 
-input LinkCreateInput {
+input FeedCreateInput {
   id: ID
   description: String!
   url: String!
 }
 
-type LinkEdge {
-  node: Link!
+type FeedEdge {
+  node: Feed!
   cursor: String!
 }
 
-enum LinkOrderByInput {
+enum FeedOrderByInput {
   id_ASC
   id_DESC
   createdAt_ASC
@@ -51,7 +51,7 @@ enum LinkOrderByInput {
   url_DESC
 }
 
-type LinkPreviousValues {
+type FeedPreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -59,35 +59,35 @@ type LinkPreviousValues {
   url: String!
 }
 
-type LinkSubscriptionPayload {
+type FeedSubscriptionPayload {
   mutation: MutationType!
-  node: Link
+  node: Feed
   updatedFields: [String!]
-  previousValues: LinkPreviousValues
+  previousValues: FeedPreviousValues
 }
 
-input LinkSubscriptionWhereInput {
+input FeedSubscriptionWhereInput {
   mutation_in: [MutationType!]
   updatedFields_contains: String
   updatedFields_contains_every: [String!]
   updatedFields_contains_some: [String!]
-  node: LinkWhereInput
-  AND: [LinkSubscriptionWhereInput!]
-  OR: [LinkSubscriptionWhereInput!]
-  NOT: [LinkSubscriptionWhereInput!]
+  node: FeedWhereInput
+  AND: [FeedSubscriptionWhereInput!]
+  OR: [FeedSubscriptionWhereInput!]
+  NOT: [FeedSubscriptionWhereInput!]
 }
 
-input LinkUpdateInput {
+input FeedUpdateInput {
   description: String
   url: String
 }
 
-input LinkUpdateManyMutationInput {
+input FeedUpdateManyMutationInput {
   description: String
   url: String
 }
 
-input LinkWhereInput {
+input FeedWhereInput {
   id: ID
   id_not: ID
   id_in: [ID!]
@@ -146,24 +146,24 @@ input LinkWhereInput {
   url_not_starts_with: String
   url_ends_with: String
   url_not_ends_with: String
-  AND: [LinkWhereInput!]
-  OR: [LinkWhereInput!]
-  NOT: [LinkWhereInput!]
+  AND: [FeedWhereInput!]
+  OR: [FeedWhereInput!]
+  NOT: [FeedWhereInput!]
 }
 
-input LinkWhereUniqueInput {
+input FeedWhereUniqueInput {
   id: ID
 }
 
 scalar Long
 
 type Mutation {
-  createLink(data: LinkCreateInput!): Link!
-  updateLink(data: LinkUpdateInput!, where: LinkWhereUniqueInput!): Link
-  updateManyLinks(data: LinkUpdateManyMutationInput!, where: LinkWhereInput): BatchPayload!
-  upsertLink(where: LinkWhereUniqueInput!, create: LinkCreateInput!, update: LinkUpdateInput!): Link!
-  deleteLink(where: LinkWhereUniqueInput!): Link
-  deleteManyLinks(where: LinkWhereInput): BatchPayload!
+  createFeed(data: FeedCreateInput!): Feed!
+  updateFeed(data: FeedUpdateInput!, where: FeedWhereUniqueInput!): Feed
+  updateManyFeeds(data: FeedUpdateManyMutationInput!, where: FeedWhereInput): BatchPayload!
+  upsertFeed(where: FeedWhereUniqueInput!, create: FeedCreateInput!, update: FeedUpdateInput!): Feed!
+  deleteFeed(where: FeedWhereUniqueInput!): Feed
+  deleteManyFeeds(where: FeedWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -184,14 +184,14 @@ type PageInfo {
 }
 
 type Query {
-  link(where: LinkWhereUniqueInput!): Link
-  links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link]!
-  linksConnection(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LinkConnection!
+  feed(where: FeedWhereUniqueInput!): Feed
+  feeds(where: FeedWhereInput, orderBy: FeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Feed]!
+  feedsConnection(where: FeedWhereInput, orderBy: FeedOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FeedConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
-  link(where: LinkSubscriptionWhereInput): LinkSubscriptionPayload
+  feed(where: FeedSubscriptionWhereInput): FeedSubscriptionPayload
 }
 `
       }

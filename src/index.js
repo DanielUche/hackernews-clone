@@ -1,44 +1,33 @@
 const { GraphQLServer } = require("graphql-yoga");
 const { prisma } = require("./generated/prisma-client");
 
-let links = [
-  {
-    id: "link-0",
-    url: "www.howtographql.com",
-    description: "Fullstack tutorial for GraphQL"
-  },
-  {
-    id: "link-1",
-    url: "www.google.com",
-    description: "Web Search"
-  }
-];
-
 const feed = (_, args, ctx) => {
-  return links.find(link => link.id === args.id);
+  return prisma.feed({ id: args.id });
 };
 
 const resolvers = {
   Query: {
     info: () => `This is the API of a hackernews clone`,
-    feeds: () => links,
+    feeds: (root, args, context, info) => {
+      return prisma.feeds();
+    },
     feed
   },
   Mutation: {
-    newFeed: (parent, args) => {
-      let idCount = links.length;
-      const link = {
-        id: `link-${idCount}`,
-        description: args.description,
-        url: args.url
-      };
-      links.push(link);
+    newFeed: async (parent, args, ctx, info) => {
+      const link = await prisma.createFeed(args);
       return link;
     },
-    updateFeed: (parent, args) => {
-      const index = links.findIndex(link => link.id === args.id);
-      links[index] = args;
-      return args;
+    updateFeed: async (parent, args) => {
+      const { id } = args;
+      delete args.id;
+      const feed = await prisma.updateFeed({
+        data: args,
+        where: {
+          id
+        }
+      });
+      return feed;
     },
     deleteFeed: (parent, args) => {
       const index = links.findIndex(link => link.id === args.id);
@@ -53,24 +42,5 @@ const server = new GraphQLServer({
   typeDefs: "./src/schemas/index.graphql",
   resolvers
 });
-
-const setPrisma = async () => {
-  const newLink = await prisma.createLink({
-    url: "www.prisma.io",
-    description: "Prisma replaces traditional ORMs"
-  });
-
-  console.log(`Created new link: ${newLink.url} (ID: ${newLink.id})`);
-
-  // Read all links from the database and print them to the console
-  const allLinks = await prisma.links();
-  console.log(allLinks);
-};
-
-try {
-  setPrisma();
-} catch (err) {
-  console.log(err);
-}
 
 server.start(() => console.log(`Server is running on http://localhost:4000`));

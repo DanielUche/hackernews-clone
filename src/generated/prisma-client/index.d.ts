@@ -16,7 +16,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
-  link: (where?: LinkWhereInput) => Promise<boolean>;
+  feed: (where?: FeedWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -38,47 +38,47 @@ export interface Prisma {
    * Queries
    */
 
-  link: (where: LinkWhereUniqueInput) => LinkNullablePromise;
-  links: (args?: {
-    where?: LinkWhereInput;
-    orderBy?: LinkOrderByInput;
+  feed: (where: FeedWhereUniqueInput) => FeedNullablePromise;
+  feeds: (args?: {
+    where?: FeedWhereInput;
+    orderBy?: FeedOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
-  }) => FragmentableArray<Link>;
-  linksConnection: (args?: {
-    where?: LinkWhereInput;
-    orderBy?: LinkOrderByInput;
+  }) => FragmentableArray<Feed>;
+  feedsConnection: (args?: {
+    where?: FeedWhereInput;
+    orderBy?: FeedOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
-  }) => LinkConnectionPromise;
+  }) => FeedConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
    * Mutations
    */
 
-  createLink: (data: LinkCreateInput) => LinkPromise;
-  updateLink: (args: {
-    data: LinkUpdateInput;
-    where: LinkWhereUniqueInput;
-  }) => LinkPromise;
-  updateManyLinks: (args: {
-    data: LinkUpdateManyMutationInput;
-    where?: LinkWhereInput;
+  createFeed: (data: FeedCreateInput) => FeedPromise;
+  updateFeed: (args: {
+    data: FeedUpdateInput;
+    where: FeedWhereUniqueInput;
+  }) => FeedPromise;
+  updateManyFeeds: (args: {
+    data: FeedUpdateManyMutationInput;
+    where?: FeedWhereInput;
   }) => BatchPayloadPromise;
-  upsertLink: (args: {
-    where: LinkWhereUniqueInput;
-    create: LinkCreateInput;
-    update: LinkUpdateInput;
-  }) => LinkPromise;
-  deleteLink: (where: LinkWhereUniqueInput) => LinkPromise;
-  deleteManyLinks: (where?: LinkWhereInput) => BatchPayloadPromise;
+  upsertFeed: (args: {
+    where: FeedWhereUniqueInput;
+    create: FeedCreateInput;
+    update: FeedUpdateInput;
+  }) => FeedPromise;
+  deleteFeed: (where: FeedWhereUniqueInput) => FeedPromise;
+  deleteManyFeeds: (where?: FeedWhereInput) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -88,9 +88,9 @@ export interface Prisma {
 }
 
 export interface Subscription {
-  link: (
-    where?: LinkSubscriptionWhereInput
-  ) => LinkSubscriptionPayloadSubscription;
+  feed: (
+    where?: FeedSubscriptionWhereInput
+  ) => FeedSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -101,7 +101,7 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type LinkOrderByInput =
+export type FeedOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "createdAt_ASC"
@@ -115,18 +115,18 @@ export type LinkOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface LinkCreateInput {
+export interface FeedCreateInput {
   id?: Maybe<ID_Input>;
   description: String;
   url: String;
 }
 
-export interface LinkUpdateInput {
+export interface FeedUpdateInput {
   description?: Maybe<String>;
   url?: Maybe<String>;
 }
 
-export interface LinkWhereInput {
+export interface FeedWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -185,28 +185,28 @@ export interface LinkWhereInput {
   url_not_starts_with?: Maybe<String>;
   url_ends_with?: Maybe<String>;
   url_not_ends_with?: Maybe<String>;
-  AND?: Maybe<LinkWhereInput[] | LinkWhereInput>;
-  OR?: Maybe<LinkWhereInput[] | LinkWhereInput>;
-  NOT?: Maybe<LinkWhereInput[] | LinkWhereInput>;
+  AND?: Maybe<FeedWhereInput[] | FeedWhereInput>;
+  OR?: Maybe<FeedWhereInput[] | FeedWhereInput>;
+  NOT?: Maybe<FeedWhereInput[] | FeedWhereInput>;
 }
 
-export interface LinkUpdateManyMutationInput {
+export interface FeedUpdateManyMutationInput {
   description?: Maybe<String>;
   url?: Maybe<String>;
 }
 
-export interface LinkSubscriptionWhereInput {
+export interface FeedSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
   updatedFields_contains_every?: Maybe<String[] | String>;
   updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<LinkWhereInput>;
-  AND?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
-  OR?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
-  NOT?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
+  node?: Maybe<FeedWhereInput>;
+  AND?: Maybe<FeedSubscriptionWhereInput[] | FeedSubscriptionWhereInput>;
+  OR?: Maybe<FeedSubscriptionWhereInput[] | FeedSubscriptionWhereInput>;
+  NOT?: Maybe<FeedSubscriptionWhereInput[] | FeedSubscriptionWhereInput>;
 }
 
-export type LinkWhereUniqueInput = AtLeastOne<{
+export type FeedWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
@@ -214,20 +214,20 @@ export interface NodeNode {
   id: ID_Output;
 }
 
-export interface LinkEdge {
-  node: Link;
+export interface FeedEdge {
+  node: Feed;
   cursor: String;
 }
 
-export interface LinkEdgePromise extends Promise<LinkEdge>, Fragmentable {
-  node: <T = LinkPromise>() => T;
+export interface FeedEdgePromise extends Promise<FeedEdge>, Fragmentable {
+  node: <T = FeedPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface LinkEdgeSubscription
-  extends Promise<AsyncIterator<LinkEdge>>,
+export interface FeedEdgeSubscription
+  extends Promise<AsyncIterator<FeedEdge>>,
     Fragmentable {
-  node: <T = LinkSubscription>() => T;
+  node: <T = FeedSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
@@ -247,7 +247,7 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface Link {
+export interface Feed {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
@@ -255,7 +255,7 @@ export interface Link {
   url: String;
 }
 
-export interface LinkPromise extends Promise<Link>, Fragmentable {
+export interface FeedPromise extends Promise<Feed>, Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
@@ -263,8 +263,8 @@ export interface LinkPromise extends Promise<Link>, Fragmentable {
   url: () => Promise<String>;
 }
 
-export interface LinkSubscription
-  extends Promise<AsyncIterator<Link>>,
+export interface FeedSubscription
+  extends Promise<AsyncIterator<Feed>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -273,8 +273,8 @@ export interface LinkSubscription
   url: () => Promise<AsyncIterator<String>>;
 }
 
-export interface LinkNullablePromise
-  extends Promise<Link | null>,
+export interface FeedNullablePromise
+  extends Promise<Feed | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -283,50 +283,50 @@ export interface LinkNullablePromise
   url: () => Promise<String>;
 }
 
-export interface LinkSubscriptionPayload {
+export interface FeedSubscriptionPayload {
   mutation: MutationType;
-  node: Link;
+  node: Feed;
   updatedFields: String[];
-  previousValues: LinkPreviousValues;
+  previousValues: FeedPreviousValues;
 }
 
-export interface LinkSubscriptionPayloadPromise
-  extends Promise<LinkSubscriptionPayload>,
+export interface FeedSubscriptionPayloadPromise
+  extends Promise<FeedSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = LinkPromise>() => T;
+  node: <T = FeedPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = LinkPreviousValuesPromise>() => T;
+  previousValues: <T = FeedPreviousValuesPromise>() => T;
 }
 
-export interface LinkSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<LinkSubscriptionPayload>>,
+export interface FeedSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FeedSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = LinkSubscription>() => T;
+  node: <T = FeedSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = LinkPreviousValuesSubscription>() => T;
+  previousValues: <T = FeedPreviousValuesSubscription>() => T;
 }
 
-export interface LinkConnection {
+export interface FeedConnection {
   pageInfo: PageInfo;
-  edges: LinkEdge[];
+  edges: FeedEdge[];
 }
 
-export interface LinkConnectionPromise
-  extends Promise<LinkConnection>,
+export interface FeedConnectionPromise
+  extends Promise<FeedConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<LinkEdge>>() => T;
-  aggregate: <T = AggregateLinkPromise>() => T;
+  edges: <T = FragmentableArray<FeedEdge>>() => T;
+  aggregate: <T = AggregateFeedPromise>() => T;
 }
 
-export interface LinkConnectionSubscription
-  extends Promise<AsyncIterator<LinkConnection>>,
+export interface FeedConnectionSubscription
+  extends Promise<AsyncIterator<FeedConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<LinkEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateLinkSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FeedEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFeedSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -352,23 +352,23 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateLink {
+export interface AggregateFeed {
   count: Int;
 }
 
-export interface AggregateLinkPromise
-  extends Promise<AggregateLink>,
+export interface AggregateFeedPromise
+  extends Promise<AggregateFeed>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateLinkSubscription
-  extends Promise<AsyncIterator<AggregateLink>>,
+export interface AggregateFeedSubscription
+  extends Promise<AsyncIterator<AggregateFeed>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface LinkPreviousValues {
+export interface FeedPreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
@@ -376,8 +376,8 @@ export interface LinkPreviousValues {
   url: String;
 }
 
-export interface LinkPreviousValuesPromise
-  extends Promise<LinkPreviousValues>,
+export interface FeedPreviousValuesPromise
+  extends Promise<FeedPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -386,8 +386,8 @@ export interface LinkPreviousValuesPromise
   url: () => Promise<String>;
 }
 
-export interface LinkPreviousValuesSubscription
-  extends Promise<AsyncIterator<LinkPreviousValues>>,
+export interface FeedPreviousValuesSubscription
+  extends Promise<AsyncIterator<FeedPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -435,7 +435,7 @@ export type Long = string;
 
 export const models: Model[] = [
   {
-    name: "Link",
+    name: "Feed",
     embedded: false
   }
 ];
