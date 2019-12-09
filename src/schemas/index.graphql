@@ -30,3 +30,7 @@ type User {
   email: String!
   feeds: [Link!]!
 }
+
+type Subscription {
+  newFeed: Link
+}
