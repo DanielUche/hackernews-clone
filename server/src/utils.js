@@ -2,9 +2,7 @@ const jwt = require("jsonwebtoken");
 const { APP_SECRET } = process.env;
 
 function getUserId(context) {
-  console.log(APP_SECRET);
   const Authorization = context.request.get("Authorization");
-  console.log(Authorization);
   if (Authorization) {
     const token = Authorization.replace("Bearer ", "");
     const { userId } = jwt.verify(token, APP_SECRET);

@@ -1,0 +1,60 @@
+type Query {
+  info: String!
+  feeds(filter: String, skip: Int, first: Int, orderBy: FeedOrderByInput): Link!
+  feed(id: ID!): SubLink
+}
+
+type Mutation {
+  newFeed(url: String!, description: String!): SubLink!
+  updateFeed(id: ID!, url: String, description: String): SubLink 
+  deleteFeed(id: ID!): SubLink 
+  signup(email: String!, password: String!, name: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
+  vote(feedId: ID!): Vote
+
+}
+
+type SubLink {
+  id: ID!
+  description: String!
+  url: String!
+  postedBy: User
+  votes: [Vote!]!
+}
+
+type Link {
+  feeds: [SubLink!]!
+  count: Int!
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  feeds: [SubLink!]!
+}
+
+type Vote {
+  id: ID!
+  feed: SubLink!
+  user: User!
+}
+
+type Subscription {
+  newFeed: SubLink
+  newVote: Vote
+}
+
+enum FeedOrderByInput {
+  description_ASC
+  description_DESC
+  url_ASC
+  url_DESC
+  createdAt_ASC
+  createdAt_DESC
+}
