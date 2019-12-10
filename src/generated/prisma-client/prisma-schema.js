@@ -11,6 +11,10 @@ type AggregateUser {
   count: Int!
 }
 
+type AggregateVote {
+  count: Int!
+}
+
 type BatchPayload {
   count: Long!
 }
@@ -24,6 +28,7 @@ type Feed {
   description: String!
   url: String!
   postedBy: User
+  votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote!]
 }
 
 type FeedConnection {
@@ -37,6 +42,7 @@ input FeedCreateInput {
   description: String!
   url: String!
   postedBy: UserCreateOneWithoutFeedsInput
+  votes: VoteCreateManyWithoutFeedInput
 }
 
 input FeedCreateManyWithoutPostedByInput {
@@ -44,10 +50,23 @@ input FeedCreateManyWithoutPostedByInput {
   connect: [FeedWhereUniqueInput!]
 }
 
+input FeedCreateOneWithoutVotesInput {
+  create: FeedCreateWithoutVotesInput
+  connect: FeedWhereUniqueInput
+}
+
 input FeedCreateWithoutPostedByInput {
   id: ID
   description: String!
   url: String!
+  votes: VoteCreateManyWithoutFeedInput
+}
+
+input FeedCreateWithoutVotesInput {
+  id: ID
+  description: String!
+  url: String!
+  postedBy: UserCreateOneWithoutFeedsInput
 }
 
 type FeedEdge {
@@ -162,6 +181,7 @@ input FeedUpdateInput {
   description: String
   url: String
   postedBy: UserUpdateOneWithoutFeedsInput
+  votes: VoteUpdateManyWithoutFeedInput
 }
 
 input FeedUpdateManyDataInput {
@@ -191,14 +211,33 @@ input FeedUpdateManyWithWhereNestedInput {
   data: FeedUpdateManyDataInput!
 }
 
+input FeedUpdateOneRequiredWithoutVotesInput {
+  create: FeedCreateWithoutVotesInput
+  update: FeedUpdateWithoutVotesDataInput
+  upsert: FeedUpsertWithoutVotesInput
+  connect: FeedWhereUniqueInput
+}
+
 input FeedUpdateWithoutPostedByDataInput {
   description: String
   url: String
+  votes: VoteUpdateManyWithoutFeedInput
+}
+
+input FeedUpdateWithoutVotesDataInput {
+  description: String
+  url: String
+  postedBy: UserUpdateOneWithoutFeedsInput
 }
 
 input FeedUpdateWithWhereUniqueWithoutPostedByInput {
   where: FeedWhereUniqueInput!
   data: FeedUpdateWithoutPostedByDataInput!
+}
+
+input FeedUpsertWithoutVotesInput {
+  update: FeedUpdateWithoutVotesDataInput!
+  create: FeedCreateWithoutVotesInput!
 }
 
 input FeedUpsertWithWhereUniqueWithoutPostedByInput {
@@ -267,6 +306,9 @@ input FeedWhereInput {
   url_ends_with: String
   url_not_ends_with: String
   postedBy: UserWhereInput
+  votes_every: VoteWhereInput
+  votes_some: VoteWhereInput
+  votes_none: VoteWhereInput
   AND: [FeedWhereInput!]
   OR: [FeedWhereInput!]
   NOT: [FeedWhereInput!]
@@ -291,6 +333,11 @@ type Mutation {
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createVote(data: VoteCreateInput!): Vote!
+  updateVote(data: VoteUpdateInput!, where: VoteWhereUniqueInput!): Vote
+  upsertVote(where: VoteWhereUniqueInput!, create: VoteCreateInput!, update: VoteUpdateInput!): Vote!
+  deleteVote(where: VoteWhereUniqueInput!): Vote
+  deleteManyVotes(where: VoteWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -317,12 +364,16 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  vote(where: VoteWhereUniqueInput!): Vote
+  votes(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vote]!
+  votesConnection(where: VoteWhereInput, orderBy: VoteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): VoteConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
   feed(where: FeedSubscriptionWhereInput): FeedSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  vote(where: VoteSubscriptionWhereInput): VoteSubscriptionPayload
 }
 
 type User {
@@ -347,6 +398,11 @@ input UserCreateInput {
   email: String!
   password: String!
   feeds: FeedCreateManyWithoutPostedByInput
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 input UserCreateOneWithoutFeedsInput {
@@ -408,6 +464,13 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  name: String
+  email: String
+  password: String
+  feeds: FeedUpdateManyWithoutPostedByInput
+}
+
 input UserUpdateInput {
   name: String
   email: String
@@ -419,6 +482,13 @@ input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
+}
+
+input UserUpdateOneRequiredInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  connect: UserWhereUniqueInput
 }
 
 input UserUpdateOneWithoutFeedsInput {
@@ -434,6 +504,11 @@ input UserUpdateWithoutFeedsDataInput {
   name: String
   email: String
   password: String
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserUpsertWithoutFeedsInput {
@@ -525,6 +600,143 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+}
+
+type Vote {
+  id: ID!
+  feed: Feed!
+  user: User!
+}
+
+type VoteConnection {
+  pageInfo: PageInfo!
+  edges: [VoteEdge]!
+  aggregate: AggregateVote!
+}
+
+input VoteCreateInput {
+  id: ID
+  feed: FeedCreateOneWithoutVotesInput!
+  user: UserCreateOneInput!
+}
+
+input VoteCreateManyWithoutFeedInput {
+  create: [VoteCreateWithoutFeedInput!]
+  connect: [VoteWhereUniqueInput!]
+}
+
+input VoteCreateWithoutFeedInput {
+  id: ID
+  user: UserCreateOneInput!
+}
+
+type VoteEdge {
+  node: Vote!
+  cursor: String!
+}
+
+enum VoteOrderByInput {
+  id_ASC
+  id_DESC
+}
+
+type VotePreviousValues {
+  id: ID!
+}
+
+input VoteScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  AND: [VoteScalarWhereInput!]
+  OR: [VoteScalarWhereInput!]
+  NOT: [VoteScalarWhereInput!]
+}
+
+type VoteSubscriptionPayload {
+  mutation: MutationType!
+  node: Vote
+  updatedFields: [String!]
+  previousValues: VotePreviousValues
+}
+
+input VoteSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: VoteWhereInput
+  AND: [VoteSubscriptionWhereInput!]
+  OR: [VoteSubscriptionWhereInput!]
+  NOT: [VoteSubscriptionWhereInput!]
+}
+
+input VoteUpdateInput {
+  feed: FeedUpdateOneRequiredWithoutVotesInput
+  user: UserUpdateOneRequiredInput
+}
+
+input VoteUpdateManyWithoutFeedInput {
+  create: [VoteCreateWithoutFeedInput!]
+  delete: [VoteWhereUniqueInput!]
+  connect: [VoteWhereUniqueInput!]
+  set: [VoteWhereUniqueInput!]
+  disconnect: [VoteWhereUniqueInput!]
+  update: [VoteUpdateWithWhereUniqueWithoutFeedInput!]
+  upsert: [VoteUpsertWithWhereUniqueWithoutFeedInput!]
+  deleteMany: [VoteScalarWhereInput!]
+}
+
+input VoteUpdateWithoutFeedDataInput {
+  user: UserUpdateOneRequiredInput
+}
+
+input VoteUpdateWithWhereUniqueWithoutFeedInput {
+  where: VoteWhereUniqueInput!
+  data: VoteUpdateWithoutFeedDataInput!
+}
+
+input VoteUpsertWithWhereUniqueWithoutFeedInput {
+  where: VoteWhereUniqueInput!
+  update: VoteUpdateWithoutFeedDataInput!
+  create: VoteCreateWithoutFeedInput!
+}
+
+input VoteWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  feed: FeedWhereInput
+  user: UserWhereInput
+  AND: [VoteWhereInput!]
+  OR: [VoteWhereInput!]
+  NOT: [VoteWhereInput!]
+}
+
+input VoteWhereUniqueInput {
+  id: ID
 }
 `
       }

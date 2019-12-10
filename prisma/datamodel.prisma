@@ -1,3 +1,10 @@
+
+type Vote {
+  id: ID! @id
+  feed: Feed!
+  user: User!
+}
+
 type Feed {
   id: ID! @id
   createdAt: DateTime! @createdAt
@@ -5,6 +12,7 @@ type Feed {
   description: String!
   url: String!
   postedBy: User
+  votes: [Vote!]!
 }
 
 type User {
