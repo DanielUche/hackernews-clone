@@ -1,24 +1,44 @@
 import React, { Component } from 'react';
+import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
+
+
 import Feed from './Feed';
+
+
+const FEED_QUERY = gql`
+  {
+    feeds {
+      feeds {
+        id
+        createdAt
+        url
+        description
+      }
+    }
+  }
+`
 
 class FeedList extends Component {
   render() {
-    const feedsToRender = [
-      {
-        id: '1',
-        description: 'Prisma turns your database into a GraphQL API 😎',
-        url: 'https://www.prismagraphql.com',
-      },
-      {
-        id: '2',
-        description: 'The best GraphQL client',
-        url: 'https://www.apollographql.com/docs/react/',
-      },
-    ]
-
     return (
-      <div>{feedsToRender.map(feed => <Feed key={feed.id} feed={feed} />)}</div>
-    )
+        <Query query={FEED_QUERY}>
+            {({ loading, error, data }) => {
+
+                if (loading) return <div>Fetching... </div>
+                if(error) return <div>Error</div>
+
+                const feedsToRender = data.feeds.feeds
+
+                return (
+                    <div>
+                        {feedsToRender.map((feed, i) => <Feed key={feed.key + `i-${i}`} feed={feed} />)}
+                    </div>
+                )
+
+            }}
+        </Query>
+        )
   }
 }
 
