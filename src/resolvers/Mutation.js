@@ -1,6 +1,6 @@
 const { APP_SECRET, getUserId } = require("../utils");
 const bcrypt = require("bcryptjs");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 const newFeed = async (parent, args, ctx, info) => {
   const userId = getUserId(ctx);
@@ -62,10 +62,27 @@ async function login(parent, args, context, info) {
     user
   };
 }
+
+async function vote(parent, args, context, info) {
+  const userId = getUserId(context);
+  const linkExists = await context.prisma.$exists.vote({
+    user: { id: userId },
+    feed: { id: args.feedId }
+  });
+  if (linkExists) {
+    throw new Error(`Already voted for feed: ${args.feedId}`);
+  }
+  return context.prisma.createVote({
+    user: { connect: { id: userId } },
+    feed: { connect: { id: args.feedId } }
+  });
+}
+
 module.exports = {
   newFeed,
   updateFeed,
   deleteFeed,
   signup,
-  login
+  login,
+  vote
 };
