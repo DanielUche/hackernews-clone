@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import Header from "./Header";
 import FeedList from "./FeedList";
 import CreateFeed from "./CreateFeed";
+import Login from "./Login";
 
 class App extends Component {
   state = {};
@@ -17,6 +18,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={FeedList} />
             <Route exact path="/create" component={CreateFeed} />
+            <Route exact path="/login" component={Login} />
           </Switch>
         </div>
       </div>
