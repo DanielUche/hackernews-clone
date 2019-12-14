@@ -29,10 +29,12 @@ const feeds = async (root, args, context, info) => {
   };
 };
 
+const users = (_, args, ctx, info) => ctx.prisma.users()
+
 const info = () => `This is the API of a hackernews clone`;
 
 module.exports = {
   feed,
   feeds,
-  info
+  info, users
 };

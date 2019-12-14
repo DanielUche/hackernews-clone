@@ -2,6 +2,7 @@ type Query {
   info: String!
   feeds(filter: String, skip: Int, first: Int, orderBy: FeedOrderByInput): Link!
   feed(id: ID!): SubLink
+  users: [User!]!
 }
 
 type Mutation {
@@ -11,7 +12,6 @@ type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
   vote(feedId: ID!): Vote
-
 }
 
 type SubLink {
