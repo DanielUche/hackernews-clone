@@ -6,6 +6,7 @@ import Header from "./Header";
 import FeedList from "./FeedList";
 import CreateFeed from "./CreateFeed";
 import Login from "./Login";
+import Search from "./Search";
 
 class App extends Component {
   state = {};
@@ -19,6 +20,7 @@ class App extends Component {
             <Route exact path="/" component={FeedList} />
             <Route exact path="/create" component={CreateFeed} />
             <Route exact path="/login" component={Login} />
+            <Route exact path='/search' component={Search} />
           </Switch>
         </div>
       </div>
