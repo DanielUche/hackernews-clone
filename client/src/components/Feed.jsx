@@ -3,7 +3,7 @@ import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import { AUTH_TOKEN } from '../constants';
-import { timeDifferenceForDate} from '../utils';
+import { timeDifferenceForDate } from '../utils';
 
 const VOTE_MUTATION = gql`
   mutation VoteMutation($feedId: ID!) {
