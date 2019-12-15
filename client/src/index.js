@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import * as serviceWorker from "./serviceWorker";
 import { ApolloProvider } from "react-apollo";
 import { ApolloClient } from "apollo-client";
 import { setContext } from 'apollo-link-context';
@@ -10,6 +9,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 
 
 import "./styles/index.css";
+import * as serviceWorker from "./serviceWorker";
 import App from "./components/App";
 import { AUTH_TOKEN } from './constants';
 
