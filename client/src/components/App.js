@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
-import { BrowserRouter } from "react-router-dom";
+import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom'
 
 import Header from "./Header";
 import FeedList from "./FeedList";
@@ -17,10 +16,13 @@ class App extends Component {
         <Header />
         <div className="ph3 pv1 background-gray">
           <Switch>
-            <Route exact path="/" component={FeedList} />
-            <Route exact path="/create" component={CreateFeed} />
+            <Route exact path='/' render={() => <Redirect to='/new/1' />} />
+            {/* <Route exact path="/" component={FeedList} /> */}
+            <Route exact path='/create' component={CreateFeed} />
             <Route exact path="/login" component={Login} />
             <Route exact path='/search' component={Search} />
+            <Route exact path='/top' component={FeedList} />
+            <Route exact path='/new/:page' component={FeedList} />
           </Switch>
         </div>
       </div>

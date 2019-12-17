@@ -3,6 +3,7 @@ import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import { FEED_QUERY } from './FeedList'
+import {FEEDS_PER_PAGE} from '../constants';
 
 const POST_MUTATION = gql`
   mutation PostMutation($description: String!, $url: String!) {
@@ -42,16 +43,24 @@ class CreateFeed extends Component {
           />
         </div>
         <Mutation mutation={POST_MUTATION} variables={{ description, url }}
-            onCompleted={() => this.props.history.push('/')}
-            update={(store, { data: { post } }) => {
-              const data = store.readQuery({ query: FEED_QUERY })
-              data.feed.feeds.unshift(post)
-              store.writeQuery({
-                query: FEED_QUERY,
-                data
-              })
-            }}>
-            {postMutation => <button onClick={postMutation}>Submit</button>}
+          onCompleted={() => this.props.history.push('/new/1')}
+          update={(store, { data: { post } }) => {
+            const first = FEEDS_PER_PAGE
+            const skip = 0
+            const orderBy = 'createdAt_DESC'
+            const data = store.readQuery({
+              query: FEED_QUERY,
+              variables: { first, skip, orderBy }
+            })
+            data.feed.feeds.unshift(post)
+            store.writeQuery({
+              query: FEED_QUERY,
+              data,
+              variables: { first, skip, orderBy }
+            })
+          }}
+        >
+          {postMutation => <button onClick={postMutation}>Submit</button>}
         </Mutation>
       </div>
     )
